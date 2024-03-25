@@ -98,7 +98,7 @@ kubectl logs [ID DU POD]
 
 A chaque fois qu'on veut modifier notre deploiement, par exemple, le nombre de copies, ou mettre à jour la version de notre API, on modifie le fichier `deployment.k8s.yaml`, et on éxecute `kubectl apply ...`
 
-# Service
+## Service
 
 Pour l'instant, notre déploiement est en cours, mais il n'est pas disponible à l'extérieur. Nous devons établir ce lien. Il fonctionne comme suit :
 
@@ -136,7 +136,7 @@ Ensuite, déployez le service vers le cluster :
 kubectl apply -f service.k8s.yaml 
 ```
 
-# Ingress
+## Ingress
 
 Nous voulons maintenant indiquer au cluster comment rediriger les requêtes entrantes. Pour ce faire, nous utilisons un contrôleur *Ingress*.
 
