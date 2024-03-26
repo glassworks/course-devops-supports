@@ -30,7 +30,13 @@ users:
 
 Retournez à votre DevContainer. J'ai déjà installé l'application `kubectl` dans votre DevContainer qui nous permet de communiquer avec un cluster Kubernetes.
 
-Copiez le fichier `kubeconfig-....yaml` dans votre devcontainer.
+Copiez le fichier `kubeconfig-....yaml` dans votre devcontainer, sous le dossier `k8s` (créez ce dossier s'il n'existe pas encore).
+
+Dans le terminal de votre DevContainer, naviguer dans le dossier `k8s` :
+
+```sh
+cd k8s
+```
 
 Commencez par créer une variable d'environnement qui pointe vers votre fichier kubeconfig :
 
@@ -67,7 +73,7 @@ spec:
         app: devopsapi
     spec:
       containers:
-        - name: rms-core
+        - name: devopsapi
           image: drkevinglass/devopsapi:1.0.0
           command: ["npm", "run", "start-api"]
 

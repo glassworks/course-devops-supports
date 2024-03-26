@@ -28,4 +28,18 @@
 * [Docker Hub](020-k8s/image-docker.md)
 * [K8s](020-k8s/kubernetes.md)
 
-## CI/CD
+## CI
+
+* [Introduction](030-cicd/001-introduction.md)
+* [Tests unitaires](030-cicd/010-tests-unitaires.md)
+* [Tests d'intégration](030-cicd/020-tests-integration.md)
+* [Tests e2e](030-cicd/030-tests-e2e.md)
+* [Continuous integration](030-cicd/040-ci.md)
+
+## CD
+
+* [Continuous deployment](040-cd/010-cd.md)
+
+## Evaluation
+
+* [Evaluation](050-cd/010-evaluation.md)
