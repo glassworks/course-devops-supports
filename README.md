@@ -1,8 +1,10 @@
 ---
+cover: >-
+  https://images.unsplash.com/photo-1667372335962-5fd503a8ae5b?crop=entropy&cs=srgb&fm=jpg&ixid=M3wxOTcwMjR8MHwxfHNlYXJjaHw3fHxkZXZvcHN8ZW58MHx8fHwxNzExNjk5MTk0fDA&ixlib=rb-4.0.3&q=85
 coverY: 0
 ---
 
-# Introduction à DevOps
+# DevOps
 
 Bienvenue au cours DevOps, conçu par Kevin Glass, Ph.D.
 
@@ -16,7 +18,7 @@ Aidez à l'amélioration des supports ! Si vous constatez une coquille, n'hésit
 
 ## Projet de travail
 
-Nous allons travailler avec un projet NodeJS, contenant la base d'un API. Vous trouverez le projet ici :&#x20;
+Nous allons travailler avec un projet NodeJS, contenant la base d'un API. Vous trouverez le projet ici :
 
 [devops-sample-main.zip](https://dev.glassworks.tech:18081/courses/devops/devops-sample/-/archive/main/devops-sample-main.zip)
 
