@@ -46,7 +46,7 @@ Dans la deuxième phase, nous construisons une image propre avec seulement le st
 Pour construire l'image, nous exécutons la commande suivante :
 
 ```sh
-docker build  -t devops_api_prod -f ./docker/Dockerfile.prod .
+docker buildx build --platform linux/amd64  -t devops_api_prod -f ./docker/Dockerfile.prod .
 ```
 
 L'image est construite, et on peut le voir avec la commande :
