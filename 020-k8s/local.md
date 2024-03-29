@@ -69,8 +69,6 @@ Nous allons construire une image Docker similaire à `vscode_api` que nous allon
 
 {% hint style="success" %}
 
-If you followed the [](https://docs.glassworks.tech/api/mise-en-production/005-git)
-
 Si vous avez suivi le [cours API](https://docs.glassworks.tech/api/mise-en-production/005-git), vous avez déployé manuellement votre application sur un serveur, en téléchargeant votre source sur Git, puis en vous connectant à votre serveur, en construisant et en déployant un conteneur Docker sur le serveur.
 
 C'était un peu lent et répétitif. En utilisant Docker et Kubernetes, nous pouvons automatiser ce processus !
