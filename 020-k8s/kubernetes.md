@@ -108,9 +108,9 @@ A chaque fois qu'on veut modifier notre deploiement, par exemple, le nombre de c
 
 Pour l'instant, notre déploiement est en cours, mais il n'est pas disponible à l'extérieur. Nous devons établir ce lien. Il fonctionne comme suit :
 
-Load-Balancer &rarr; Ingress &rarr; Service &rarr; Deployment
+Load-Balancer &rarr; Ingress &rarr; Service &rarr; Deployment &rarr; Pods
 
-Nous avons déjà configuré le "Deployment". 
+Nous avons déjà configuré le "Deployment" qui a généré automatiquement plusieurs Pods. 
 
 Le LoadBalancer est une ressource payante de mon fournisseur de services que j'ai déjà configurée pour vous. Je vous donnerai l'adresse IP précise en classe.
 
