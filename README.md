@@ -18,11 +18,15 @@ Aidez à l'amélioration des supports ! Si vous constatez une coquille, n'hésit
 
 ## Projet de travail
 
+Pour travailler en local, nous allons utiliser Docker Dev Containers. Pour installer le nécessaire, suivez [ce guide, étapes 1, 2, et 3](https://docs.glassworks.tech/unix-shell/introduction/010-introduction/installation-party). 
+
 Nous allons travailler avec un projet NodeJS, contenant la base d'un API. Vous trouverez le projet ici :
 
 [devops-sample-main.zip](https://dev.glassworks.tech:18081/courses/devops/devops-sample/-/archive/main/devops-sample-main.zip)
 
 Téléchargez, décompressez, et ouvrez le projet dans VSCode, et relancez votre projet dans un Dev Container (avec Docker). Suivez les instructions dans le `README.md` afin de lancer une version fonctionnelle de l'api.
+
+
 
 ## Copyright
 
