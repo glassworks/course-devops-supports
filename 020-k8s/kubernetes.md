@@ -41,7 +41,7 @@ cd k8s
 Commencez par créer une variable d'environnement qui pointe vers votre fichier kubeconfig :
 
 ```sh
-export KUBECONFIG=./kubeconfig.yml 
+export KUBECONFIG=./kubeconfig.yaml 
 ```
 
 Nous pouvons maintenant interagir avec le cluster Kubernetes, en listant tous les *pods* (ou conteneurs) qui sont en cours d'exécution :
