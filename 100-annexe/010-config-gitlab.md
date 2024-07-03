@@ -17,7 +17,8 @@ Suivez les instructions [ici](https://docs.glassworks.tech/unix-shell/gestion-de
 
 ## GitLab
 
-Installer une instance avec l'appli Gitlab chez Scaleway. Faites une connexion via SSH.
+
+Installer une instance avec l'appli Gitlab chez Scaleway ou bien en suivant [ce lien](https://about.gitlab.com/install/#ubuntu). Faites une connexion via SSH.
 
 Installer le daemon de mailing :
 
