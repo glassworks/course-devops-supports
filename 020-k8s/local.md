@@ -14,7 +14,7 @@ npm install
 npm run server
 ```
 
-If all goes well you can query the endpoint /info on this api (use Postman or curl) :
+Vous saurez si tout fonctionne correctement si vous arrivez à consulter le chemin d'information à [http://localhost:5055/info](http://localhost:5055/info) dans un navigateur web.
 
 ```sh
 curl http://127.0.0.1:5050/info
@@ -23,18 +23,16 @@ curl http://127.0.0.1:5050/info
 {"title":"DevOps Code Samples API","host":"4c320d7f5a06","platform":"linux","type":"Linux"}
 ```
 
-Jetez un coup d'œil au fichier docker-compose.dev.yml. Il s'agit de l'environnement de développement qui crée deux conteneurs, un pour VSCode (basé sur l'image node:18), et un autre pour faire tourner une base de données MariaDB.
+Jetez un coup d'œil au fichier docker-compose.dev.yml. Il s'agit de l'environnement de développement qui crée deux conteneurs, un pour VSCode (basé sur l'image node:20), et un autre pour faire tourner une base de données MariaDB.
 
 ```yml
-version: '3.9'
-
 services:
-  vscode_api:
-    image: rg.fr-par.scw.cloud/devops-code-samples-vscode/vscode_api:1.0.0
+  vscode_devops_api:
+    image: rg.fr-par.scw.cloud/devops-code-samples-vscode/vscode_devops:2.0.1
     command: /bin/bash -c "while sleep 1000; do :; done"
     working_dir: /home/dev
     networks:
-      - api-network
+      - api-devops-network
     volumes:
       - ./:/home/dev:cached
     labels:
@@ -53,24 +51,21 @@ services:
       "--collation-server=utf8mb4_unicode_ci",
     ]
     volumes:
-      - ./dbms/dbms-data:/var/lib/mysql
-      - ./dbms/mariadb.cnf:/etc/mysql/mariadb.cnf
+      - ./.data:/var/lib/mysql
     networks:
-      - api-network
+      - api-devops-network
 
 networks:
-  api-network:
+  api-devops-network:
     driver: bridge
-    name: api-network
+    name: api-devops-network
 
 ```
 
-Nous allons construire une image Docker similaire à `vscode_api` que nous allons déployer dans un cluster Kubernetes ! 
+Nous allons construire une image Docker similaire à `vscode_devops_api` que nous allons déployer dans un cluster Kubernetes ! 
 
 {% hint style="success" %}
 
-Si vous avez suivi le [cours API](https://docs.glassworks.tech/api/mise-en-production/005-git), vous avez déployé manuellement votre application sur un serveur, en téléchargeant votre source sur Git, puis en vous connectant à votre serveur, en construisant et en déployant un conteneur Docker sur le serveur.
-
-C'était un peu lent et répétitif. En utilisant Docker et Kubernetes, nous pouvons automatiser ce processus !
+Si vous avez suivi le [cours API](https://docs.glassworks.tech/api/mise-en-production/001-docker-image), vous avez déployé manuellement votre application en local, en mettant en marche un Container Docker.
 
 {% endhint %}

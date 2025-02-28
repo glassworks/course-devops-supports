@@ -8,56 +8,11 @@ C'est-à-dire, on envoie des requêtes HTTP et on évalue les réponses.
 
 Cela veut dire qu'il faut lancer notre serveur et créer de requêtes HTTPS et recevoir des réponses. Comment faire ?
 
-### Restructurer notre serveur
-
-Pour nos tests e2e, il faudrait pouvoir lancer et arrêter dynamiquement notre serveur (comme on a fait pour le SGBDR dans la section précédente).
-
-On va renommer `server.ts` à `server_manager.ts`, et restructurer le fichier en deux fonctions exportées, qui lance et arrête notre serveur, et retourne une référence.
-
-```ts
-export const StartServer = async () => {
-  // Récupérer le port des variables d'environnement ou préciser une valeur par défaut
-  const PORT = process.env.PORT || 5050;
-
-  // Créer l'objet Express
-  const app = Express();
-
-  // L'appli parse le corps du message entrant comme du json
-  app.use(json());
-
-  ...
-}
-
-
-export const StopServer = async (server: Server|undefined) => {
-  if (!server) { return; }
-  return new Promise<void>(
-    (resolve, reject) => {
-      server.close(
-        (err) => {
-          if (err) {
-            reject(err);            
-          } else {
-            resolve();
-          }
-        }
-      )
-    }
-  );  
-}
-```
-
-`server.ts` sert à appeler cette fonction, ainsi que répondre aux événements du système d'exploitation concernant le fait d'arrêter ou pas.
-
-```ts
-StartServer().then(
-  (server) => {
-    ...
-```
+Grâce à une conception intelligente, nous avons créé deux fonctions `StartServer` et `StopServer` dans `src/servce_manager.ts` qui nous permettent de démarrer et d'arrêter le serveur.
 
 Avec cette structure on peut facilement lancer un serveur à partir de nos tests.
 
-### Outil pour lancer le serveur
+## Outil pour lancer le serveur
 
 Nous créons un outil qui permet de lancer et arrêter le serveur dans `test/utility/TestServer.ts` :
 
@@ -107,11 +62,11 @@ Cela pour indiquer qu'il faut lancer le serveur. Aussi, nous précisons le port 
 Ensuite, dans un test e2e pour un utilisateur `/test/e2e/suites/User.test.ts`, on peut le lancer et fermer dans les _hooks_ `before` et `after` :
 
 ```ts
+import { DB } from '@orm/DB';
 import axios from 'axios';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { describe } from 'mocha';
-import { DB } from '../../../src/utility/DB';
 import { RootDB } from '../../utility/RootDB';
 import { TestServer } from '../../utility/TestServer';
 
@@ -134,7 +89,7 @@ describe("User CRUD", function () {
   });
 
   it("Create a new user", async function () {
-    const result = await axios.post(process.env.API_HOST + '/user', 
+    const result = await axios.put(process.env.API_HOST + '/user', 
       {
         familyName: "Glass",
         givenName: "Kevin",
@@ -154,7 +109,7 @@ describe("User CRUD", function () {
 
   it("Create the same user twice returns an error", async function () {
 
-    const response = await axios.post(process.env.API_HOST + '/user', 
+    const response = await axios.put(process.env.API_HOST + '/user', 
       {
         familyName: "Glass",
         givenName: "Kevin",
@@ -182,6 +137,13 @@ describe("User CRUD", function () {
 ```sh
 npm install --save-dev axios
 ```
+
+Enfin, pour simplifier cette démo, nous avons désactivé la sécurité sur la route `/user`. Dans la réalité, votre test devrait d'abord se connecter avec un utilisateur que vous avez défini dans vos données de départ, puis effectuer le test e2e.  Dans `src/controllers/UserController.ts` :
+
+```ts
+// @Security('jwt')  
+```
+
 
 ### Lancer nos tests e2e
 

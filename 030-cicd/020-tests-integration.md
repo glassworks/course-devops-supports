@@ -51,7 +51,7 @@ flush privileges;
 {% hint style="success" %}
 Jusqu'au présent, nous avons utilisé **`use school;`** dans le DDL. Si on veut réutiliser le même DDL pour nos tests, **on sera obligé d'enlever cette ligne du DD**L.
 
-Pour mettre à jour le schéma de la base de données, nous serions obligés de désormais préciser le nom de la **database** sur la ligne de commande mycli : `mycli -h dbms -u root school < ./dbms/ddl/ddl.sql`
+Pour mettre à jour le schéma de la base de données, nous serions obligés de désormais préciser le nom de la **database** sur la ligne de commande mycli : `mycli -h dbms -u root school < ./src/model/schema/ddl.sql`
 {% endhint %}
 
 ## Outil pour réinitialiser notre base de données
@@ -70,7 +70,7 @@ Pour cela, j'ai créé une classe utilitaire qui s'appelle `test/utility/RootDB.
 
 ```ts
 import { readFile } from 'fs/promises';
-import mysql from 'mysql2/promise';
+import { createPool } from 'mysql2/promise';
 import { PoolOptions } from 'mysql2/typings/mysql';
 import { join } from 'path';
 
@@ -91,11 +91,9 @@ export class RootDB {
       password: process.env.DB_ROOT_PASSWORD || "rootpassword",
       multipleStatements: true
     };
-    const POOL = mysql.createPool(config);
+    const POOL = createPool(config);
 
     const setup = await readFile(join('dbms', 'ddl', 'init-test.sql'), { encoding: 'utf-8'});   
-    console.log(config);
-    console.log(setup); 
     await POOL.query(setup);
 
     const ddl = await readFile(join('dbms', 'ddl', 'ddl.sql'), { encoding: 'utf-8'});
@@ -111,18 +109,18 @@ export class RootDB {
 Nous allons utiliser une librairie de plus, `chai-as-promised` qui permet d'exprimer nos assertions qui concernent des Promises (des opérations `async`).
 
 ```bash
-npm install --save-dev chai-as-promised @types/chai-as-promised
+npm install --save-dev chai-as-promised@^7 @types/chai-as-promised@^7
 ```
 
 On pourrait, par exemple, tester une opération CRUD pour l'ajout d'un utilisateur (`test/integration/suites/User.integration.ts`)
 
 ```ts
+import { UserController } from '@controllers/UserController';
+import { DB } from '@orm/DB';
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { describe } from 'mocha';
-import { RootDB } from '../utility/RootDB';
-import { DB } from '../../src/utility/DB';
-import { UserController } from '../../src/routes/UserController';
+import { RootDB } from '../../utility/RootDB';
 
 chai.use(chaiAsPromised);
 
@@ -167,7 +165,7 @@ describe("User CRUD", function () {
 
 Note bien l'utilisation du _hook_ `before` et `after`. Ce sont les fonctions appelées avant tous les tests de ce fichier et après tous les tests. Cela permet d'initialiser la base de données, et aussi fermer la connexion à la fin de tous les tests.
 
-&#x20;Il faut donc ajouter la fonction `Close()` à la classe `src/utility/DB.ts`:
+&#x20;Il faut donc ajouter la fonction `Close()` à la classe `src/utility/DB.ts`, si pas déjà fait :
 
 <pre class="language-typescript"><code class="lang-typescript">export class DB {
   private static POOL: Pool|undefined;  // Ajouter |undefined
@@ -212,7 +210,7 @@ Ensuite, nous créons des scripts dans `package.json` pour lancer nos tests d'in
 ```json
   "scripts": {
     "integration": "env-cmd -f ./test/.env.test npm run integration-no-env",
-    "integration-no-env": "mocha -r ts-node/register \"test/integration/suites/**/*.test.ts\"",
+    "integration-no-env": "nyc --report-dir ./coverage/integration mocha -r ts-node/register -r source-map-support/register -r tsconfig-paths/register --recursive \"test/integration/suites/**/*.test.ts\"",    
   },
 ```
 

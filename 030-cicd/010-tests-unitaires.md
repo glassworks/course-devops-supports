@@ -126,7 +126,7 @@ Puisque ce sont des paquets utilisés uniquement en développement, on les aurai
 
 ```sh
 npm install --save-dev mocha @types/mocha
-npm install --save-dev chai @types/chai 
+npm install --save-dev chai@^4 @types/chai@^4
 ```
 
 Attention l'option `--save-dev` : on veut utiliser ces packages uniquement en développement et pas en déploiement.
@@ -186,7 +186,7 @@ Pour exécuter notre test, on ajoute un script à [package.json](../package.json
 ```json
   "scripts": {
     ...
-    "unit": "mocha -r ts-node/register \"test/unit/suites/**/*.test.ts\""
+    "unit": "mocha -r ts-node/register -r tsconfig-paths/register \"test/unit/suites/**/*.test.ts\""
   },
 ```
 
@@ -215,12 +215,27 @@ Essayez d'apporter une modification qui change le comportement du module Adview 
 
 Nous avons ajouté des fichiers `.ts` à notre projet qu'on ne veut pas forcément inclure dans le build final. Si on essaye de lancer `tsc` sans la libraire `mocha` installé, il y aura une erreur.
 
-Nous allons donc exclure notre dossier `test` des builds en production. Pour cela, il faut modifier `tsconfig.json` :
+Nous allons donc exclure notre dossier `test` des builds en production. Pour cela, il faut créer un `tsconfig.build.json` qui dérive du `tsconfig.json` de base, mais qui exclue le dossier `test` :
 
 ```json
+{
+  "extends": "./tsconfig",
   "exclude": [
     "test"
   ]
+}
+```
+
+On modifie ensuite le script `build` dans `package.json` pour utiliser plutôt ce `tsconfig.build.json` :
+
+```json
+  ...
+  "scripts": {
+    "server": "nodemon",
+    "compile": "tsoa -r tsconfig-paths/register spec-and-routes",
+    "clean": "rimraf build",
+    "build": "npm run clean && npm run compile && tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json && copyfiles public/**/* build/",
+    ...
 ```
 
 ### Une bonne conception des tests

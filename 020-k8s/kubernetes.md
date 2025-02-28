@@ -129,8 +129,8 @@ metadata:
     app: devopsapi
 spec:
   ports:
-    - port: 5050
-      targetPort: 5050
+    - port: 5055
+      targetPort: 5055
       protocol: TCP
   selector:
     app: devopsapi
@@ -151,7 +151,7 @@ Comme nous partageons tous le même cluster (et donc la même adresse IP), nous 
 Par exemple, une requête à 
 
 ```
-http://195.154.72.167/kevin-nguni-fr 
+http://cluster.mt.glassworks.tech/kevin-nguni-fr 
 ```
 
 devrait être dirigée vers mon API.
@@ -159,7 +159,7 @@ devrait être dirigée vers mon API.
 Par contre, une requête vers 
 
 ```
-http://195.154.72.167/t_joubert-hetic-eu
+http://cluster.mt.glassworks.tech/t_joubert-hetic-eu
 ```
 
 devrait être redirigée vers l'API de cet étudiant.
@@ -186,7 +186,7 @@ spec:
           service:
             name: devopsapi-svc
             port:
-              number: 5050
+              number: 5055
     
 ```
 
@@ -205,7 +205,7 @@ Vous devriez pouvoir envoyer une requête au serveur maintenant !
 ```sh
 # Remplacez l'adress IP et par l'adresse fourni du cluster
 # Remplacez MON_CHEMIN_UNIQUE par le chemin indique dans le ingress
-curl http://195.154.72.167/MON_CHEMIN_UNIQUE/info
+curl http://cluster.mt.glassworks.tech/MON_CHEMIN_UNIQUE/info
 
 # Resultat :
 #{"title":"DevOps Code Samples API","host":"devopsapi-7774dbf9fb-sb5js","platform":"linux","type":"Linux"}%  

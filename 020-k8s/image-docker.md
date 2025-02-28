@@ -11,30 +11,30 @@ Naviguez dans le dossier du projet.
 
 ## Instructions
 
-Jetez un coup d'œil au fichier `./docker/Dockerfile.prod` :
+Jetez un coup d'œil au fichier `./config/docker/Dockerfile.prod` :
 
 
 ```Dockerfile
-FROM node:18-alpine AS api-builder
-WORKDIR app
+FROM node:20-alpine AS api-builder
+WORKDIR /app
 COPY . .
 RUN npm install
 RUN npm run clean
 RUN npm run build
 
-FROM node:18-alpine AS api
-WORKDIR app
+FROM node:20-alpine AS api
+WORKDIR /app
 COPY --from=api-builder /app/build ./
 COPY package* ./
 RUN npm install --omit=dev
-CMD npm run start-api
+CMD ["npm", "run", "start-api"]
 ```
 
 Voici la recette pour construire une image docker avec notre projet.
 
 La construction se déroule en deux phases. Dans la première phase, nous *construisons* le projet :
 
-1. Télécharger une image existante node:18-alpine
+1. Télécharger une image existante `node:20-alpine`
 2. Copier tous les fichiers du répertoire courant dans l'image
 3. Installer toutes les dépendances
 4. Lancer un build (transpiler le typecript en javascript)
@@ -46,7 +46,7 @@ Dans la deuxième phase, nous construisons une image propre avec seulement le st
 Pour construire l'image, nous exécutons la commande suivante :
 
 ```sh
-docker buildx build --platform linux/amd64  -t devops_api_prod -f ./docker/Dockerfile.prod .
+docker buildx build --platform linux/amd64,linux/arm64  -t devops_api_prod -f ./config/docker/Dockerfile.prod .
 ```
 
 L'image est construite, et on peut le voir avec la commande :
@@ -57,7 +57,7 @@ docker image ls | grep "devops_api_prod"
 
 ## Dépôt externe : Docker Hub
 
-Nous allons maintenant télécharger cette image dans le dépôt Docker Hub, où notre serveur, ou notre infrastructure, pourra la télécharger et démarrer le conteneur.
+Nous allons maintenant télécharger cette image dans le dépôt Docker Hub, ou notre serveur, ou notre infrastructure, pourra la télécharger et démarrer le conteneur.
 
 [Docker Hub](https://hub.docker.com)
 
@@ -100,7 +100,7 @@ docker login -u [VOTRE NOM D'UTILISATEUR DOCKER HUB]
 
 Vous êtes maintenant connecté à Docker Hub. Vous pouvez télécharger votre nouvelle image en utilisant :
 
-```
+```bash
 docker push [VOTRE NOM D'UTILISATEUR DOCKER HUB]/devopsapi:1.0.0
 ```
 
@@ -117,12 +117,12 @@ Testons notre image ! D'abord arrêtez votre serveur dans votre DevContainer.
 docker image rm [VOTRE NOM D'UTILISATEUR DOCKER HUB]/devopsapi:1.0.0
 
 # Lancer l'image de Docker Hub
-docker run -p 5151:5050 [VOTRE NOM D'UTILISATEUR DOCKER HUB]/devopsapi:1.0.0
+docker run -p 5151:5055 [VOTRE NOM D'UTILISATEUR DOCKER HUB]/devopsapi:1.0.0
 ```
 
 Vous verrez :
 
-```
+```bash
 Unable to find image 'drkevinglass/devopsapi:1.0.0' locally
 1.0.0: Pulling from drkevinglass/devopsapi
 Digest: sha256:51993446c5fe441232e2673df6e26eb71ad2833297642a9f38b9da0803b20657
@@ -131,7 +131,7 @@ Status: Downloaded newer image for drkevinglass/devopsapi:1.0.0
 > server@1.0.0 start-api
 > node ./server.js
 
-info: API Listening on port 5050 {"tag":"exec"}
+info: API Listening on port 5055 {"tag":"exec"}
 ```
 
 Vous pouvez maintenant tester votre API qui tourne dans votre image déployée !
@@ -140,7 +140,7 @@ Vous pouvez maintenant tester votre API qui tourne dans votre image déployée !
 curl http://127.0.0.1:5151/info
 
 # Resultat :
-{"title":"DevOps Code Samples API","host":"4c320d7f5a06","platform":"linux","type":"Linux"}
+{"title":"DevOps Code Samples API","host":"3cb5633d0e7a","platform":"linux","type":"Linux","database":{"state":"disconnected","error":"getaddrinfo ENOTFOUND dbms"}}
 ```
 
 D'accord, mais comment déployer cela dans notre infrastructure ?

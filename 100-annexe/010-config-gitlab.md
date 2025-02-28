@@ -184,7 +184,7 @@ gitlab-runner register
 # Registration token: found here: https://gitlab.mt.glassworks.tech/admin/runners
 # Tag: general
 # Executor: docker
-# Image: node:18
+# Image: node:20
 gitlab-runner verify
 gitlab-runner start
 
