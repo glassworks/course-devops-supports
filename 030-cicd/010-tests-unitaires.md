@@ -30,7 +30,7 @@ Une technique _concrète_ qui aide à la structuration de son code et utiliser d
 
 ## Cas d'étude
 
-Considérez [le code suivant](https://dev.glassworks.tech:18081/courses/devops/devops-sample/-/blob/main/src/business/AdView.ts), pour transferer de l'argent entre un annonceur de publicité et un éditeur lorsqu'une publicité est vue sur Internet : 
+Considérez [le code suivant](https://dev.glassworks.tech/courses/devops/devops-sample/-/blob/main/src/business/AdView.ts), pour transferer de l'argent entre un annonceur de publicité et un éditeur lorsqu'une publicité est vue sur Internet : 
 
 ```ts
 export class AdView {
@@ -113,7 +113,7 @@ Via un test unitaire, on pourrait :
 
 Retournons à notre projet d'exemple, qui vous avez téléchargé pour les chapitres précédentes :
 
-[devops-sample-main.zip](https://dev.glassworks.tech:18081/courses/devops/devops-sample/-/archive/main/devops-sample-main.zip)
+[devops-sample-main.zip](https://dev.glassworks.tech/courses/devops/devops-sample/-/archive/main/devops-sample-main.zip)
 
 Dans ce projet, nous avons ajouté des **tests unitaires** dans le dossier `test/unit/suites`, notamment des tests pour notre classe `Adview.ts`.
 
@@ -139,7 +139,7 @@ Pourquoi cette organisation ?
 * On range les tests unitaires à part des autres tests à venir (intégration, e2e)
 * On peut ranger encore plus par thème (`suites`)
 
-Regardons [les tests pour AdView.ts](https://dev.glassworks.tech:18081/courses/devops/devops-sample/-/blob/main/test/unit/suites/AdView.test.ts)
+Regardons [les tests pour AdView.ts](https://dev.glassworks.tech/courses/devops/devops-sample/-/blob/main/test/unit/suites/AdView.test.ts)
 
 Dans `mocha`, on utilise uns structure _BDD_ (_behaviour driven development_), qui veut dire qu'on va préciser un comportement souhaité, puis chaque test va assurer ce comportement.
 

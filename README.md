@@ -22,7 +22,7 @@ Pour travailler en local, nous allons utiliser Docker Dev Containers. Pour insta
 
 Nous allons travailler avec un projet NodeJS, contenant la base d'un API. Vous trouverez le projet ici :
 
-[devops-sample-main.zip](https://dev.glassworks.tech:18081/courses/devops/devops-sample/-/archive/main/devops-sample-main.zip)
+[devops-sample-main.zip](https://dev.glassworks.tech/courses/devops/devops-sample/-/archive/main/devops-sample-main.zip)
 
 Téléchargez, décompressez, et ouvrez le projet dans VSCode, et relancez votre projet dans un Dev Container (avec Docker). Suivez les instructions dans le `README.md` afin de lancer une version fonctionnelle de l'api.
 
