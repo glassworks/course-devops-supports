@@ -49,10 +49,16 @@ Pour construire l'image, nous exécutons la commande suivante :
 docker buildx build --platform linux/amd64,linux/arm64  -t devops_api_prod -f ./config/docker/Dockerfile.prod .
 ```
 
+Si vous êtes sur Windows et une architecture 64-bit, vous pouvez aussi simplement mettre : 
+
+```sh
+docker build -t devops_api_prod -f ./config/docker/Dockerfile.prod .
+```
+
 L'image est construite, et on peut le voir avec la commande :
 
 ```sh
-docker image ls | grep "devops_api_prod"  
+docker image ls
 ```
 
 ## Dépôt externe : Docker Hub
