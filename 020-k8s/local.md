@@ -17,7 +17,7 @@ npm run server
 Vous saurez si tout fonctionne correctement si vous arrivez à consulter le chemin d'information à [http://localhost:5055/info](http://localhost:5055/info) dans un navigateur web.
 
 ```sh
-curl http://127.0.0.1:5050/info
+curl http://127.0.0.1:5055/info
 
 # Resultat :
 {"title":"DevOps Code Samples API","host":"4c320d7f5a06","platform":"linux","type":"Linux"}
