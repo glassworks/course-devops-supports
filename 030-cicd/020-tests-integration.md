@@ -33,7 +33,7 @@ Pour notre environnement de développement, on a déjà une instance de MariaDB 
 
 Nous n'avons qu'à ajouter une deuxième **database**, qu'on appellera `school_test`. Nous allons interagir avec cette base via l'utilisateur `api-test`.
 
-Dans l'esprit de l'environnement de développement, nous allons créer la **database** et l'utilisateur dans un fichier `dbms/ddl/init-test.sql`
+Dans l'esprit de l'environnement de développement, nous allons créer la **database** et l'utilisateur dans un fichier `src/model/schema/init-test.sql`
 
 ```sql
 /* On supprime notre base pour chaque test, afin de recommoncer à zero */
