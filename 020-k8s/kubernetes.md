@@ -181,7 +181,7 @@ spec:
   - http:
       paths:
       - path: /MON_CHEMIN_UNIQUE(/|$)(.*)
-        pathType: Prefix
+        pathType: ImplementationSpecific
         backend:
           service:
             name: devopsapi-svc
