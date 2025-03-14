@@ -212,3 +212,148 @@ curl http://cluster.mt.glassworks.tech/MON_CHEMIN_UNIQUE/info
 ```
 
 Félicitations ! Vous avez réussi à mettre en place votre environnement de production !
+
+
+## Variables d'environnement (chapitre facultatif)
+
+Comment préciser les variables d'environnement pour nos deploiements ? Crée un **config-map** : 
+
+```yaml
+# k8s/api-cfg.k8s.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: devopsapi-cfg
+data:
+  PORT: "5001"
+```
+
+Ensuite, l'appliquer :
+
+```bash
+kubectl apply -f ./api-cfg.k8s.yaml
+```
+
+Il faut ensuite préciser au déploiement d'utiliser le config-map et appliquer les variables d'environnement :
+
+```yaml
+# k8s/deployment.k8s.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devopsapi
+  labels:
+    app: devopsapi
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: devopsapi
+  template:
+    metadata:
+      labels:
+        app: devopsapi
+    spec:
+      containers:
+        - name: devopsapi
+          image: drkevinglass/devopsapi:1.0.0
+          command: ["npm", "run", "start-api"]
+          envFrom:
+          - configMapRef:
+              name: devopsapi-cfg
+
+```
+
+Appliquer la modification : 
+
+```sh
+kubectl apply -f deployment.k8s.yaml 
+```
+
+Attention, on ne stocke jamais les secrets dans un config-map, car les valeurs sont stockées en texte claire !
+
+
+## Secrets (chapitre facultatif)
+
+Comment les secrets sont-ils stockés dans Kubernetes, si ce n'est via les ConfigMaps ?
+
+Nous devons ponctuellement créer des secrets à l'aide d'une commande unique qui n'est pas stockée dans un fichier ou dans GIT. Nous essayons également de ne jamais mettre un secret directement sur la ligne de commande, car n'importe qui pourrait récupérer notre historique.
+
+Tout d'abord, nous créons un fichier `.env` qui stocke nos secrets localement, et qui est ignoré par GIT (il doit se trouver dans le fichier `.gitignore`)
+
+
+```bash
+export DB_DATABASE=
+export DB_PASSWORD=
+...
+```
+
+Nous chargeons ensuite ces variables dans le shell actuel:
+
+```bash
+source .env
+```
+
+Testez que vos variables sont chargées : 
+
+```bash
+echo $DB_DATABASE
+```
+
+Vous devriez voir votre valeur affichée dans le shell.
+
+Ensuite, on va créer les secrets sur le cluster :
+
+```bash
+kubectl delete secret devopsapi-secrets
+kubectl create secret generic devopsapi-secrets  \
+  --from-literal=DB_DATABASE="$DB_DATABASE" \
+  --from-literal=DB_PASSWORD="$DB_PASSWORD"
+```
+
+Il faut ensuite préciser au déploiement d'utiliser les secrets :
+
+```yaml
+# k8s/deployment.k8s.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devopsapi
+  labels:
+    app: devopsapi
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: devopsapi
+  template:
+    metadata:
+      labels:
+        app: devopsapi
+    spec:
+      containers:
+        - name: devopsapi
+          image: drkevinglass/devopsapi:1.0.0
+          command: ["npm", "run", "start-api"]
+          envFrom:
+          - configMapRef:
+              name: devopsapi-cfg
+          - secretRef:
+              name: devopsapi-secrets
+
+```
+
+Appliquer la modification : 
+
+```sh
+kubectl apply -f deployment.k8s.yaml 
+```
+
+## Relancer vos services
+
+Après avoir modifié les variables d'environnement et/ou secrets, pour les appliquer aux deploiements existants, il suffit de juste forcer le redemarrage des pods, en scalant à 0 et puis en les recréant :
+
+```bash
+kubectl scale --replicas=0 deployment/devopsapi
+kubectl scale --replicas=2 deployment/devopsapi
+```
