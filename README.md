@@ -16,6 +16,12 @@ Les codes sources pour ces supports sont disponibles au lien suivant :
 
 Aidez à l'amélioration des supports ! Si vous constatez une coquille, n'hésitez pas à soumettre un _merge request_. Votre nom sera ajouté à la liste de remerciements !
 
+## Remerciements
+
+Merci aux personnes suivantes qui ont apporté des commentaires, des corrections et des mises à jour à ces notes :
+
+- Alexandre Grodent
+
 ## Projet de travail
 
 Pour travailler en local, nous allons utiliser Docker Dev Containers. Pour installer le nécessaire, suivez [ce guide, étapes 1, 2, et 3](https://docs.glassworks.tech/unix-shell/introduction/010-introduction/installation-party). 
